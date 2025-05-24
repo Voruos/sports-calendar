@@ -1,8 +1,11 @@
+permissions:
+  contents: write
+
 name: Merge ICS Calendars
 
 on:
   schedule:
-    - cron: '0 23 * * *'    # runs daily at 23:00 UTC (05:00 BDT)
+    - cron: '0 23 * * *'  # 23:00 UTC → 05:00 BDT next day
   workflow_dispatch:
 
 jobs:
@@ -11,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        # By default, actions/checkout@v3 will pick up the GITHUB_TOKEN that has
+        # the “contents: write” permission we just declared.
 
       - name: Set up Python
         uses: actions/setup-python@v4
