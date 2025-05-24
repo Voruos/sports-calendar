@@ -21,7 +21,7 @@ for url in urls:
     except Exception as e:
         print(f"Failed to fetch or parse {url}: {e}")
 
-# Write the merged calendar to a file
-output_path = Path("merged.ics")
+# Write the merged calendar to docs/merged.ics so GitHub Pages can serve it
+output_path = Path("docs/merged.ics")
 with open(output_path, "wb") as f:
     f.write(merged.to_ical())
