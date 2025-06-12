@@ -1,21 +1,19 @@
-permissions:
-  contents: write
-
 name: Merge ICS Calendars
 
 on:
   schedule:
-    - cron: '0 23 * * *'  # 23:00 UTC → 05:00 BDT next day
+    - cron: '0 23 * * *'     # 23:00 UTC nightly
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        # By default, actions/checkout@v3 will pick up the GITHUB_TOKEN that has
-        # the “contents: write” permission we just declared.
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,6 +23,10 @@ jobs:
       - name: Install dependencies
         run: pip install requests icalendar pytz
 
+      - name: Fetch now-streaming movies
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: python fetch_movies.py
 
       - name: Merge calendars
         run: python merge.py
