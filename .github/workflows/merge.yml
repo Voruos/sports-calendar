@@ -23,7 +23,8 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install icalendar requests
+        run: pip install requests icalendar pytz
+
 
       - name: Merge calendars
         run: python merge.py
