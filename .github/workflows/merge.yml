@@ -1,8 +1,8 @@
-name: Merge ICS Calendars
+name: Merge ICS Calendar
 
 on:
   schedule:
-    - cron: '0 23 * * *'     # 23:00 UTC nightly
+    - cron: '0 23 * * *'  # 23:00 UTC nightly
   workflow_dispatch:
 
 jobs:
@@ -31,10 +31,15 @@ jobs:
       - name: Merge calendars
         run: python merge.py
 
+      - name: Debug merged.ics size
+        run: du -h docs/merged.ics || echo "No merged calendar generated"
+
       - name: Commit merged calendar
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add docs/merged.ics
-          git commit -m "Update merged calendar" || echo "No changes to commit"
-          git push
+          git diff --quiet && echo "No changes to commit" || (
+            git commit -m "Update merged calendar"
+            git push
+          )
